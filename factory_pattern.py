@@ -8,18 +8,18 @@ class JsonElementExtractor:
         with open(filepath, mode="r", encoding="utf-8") as f:
             self.data = json.load(f)
 
-        @property
-        def parsed_data(self):
-            return self.data
+    @property
+    def parsed_data(self):
+        return self.data
 
 
 class XMLDataExtractor:
     def __init__(self, filepath):
         self.tree = etree.parse(filepath)
 
-        @property
-        def parsed_data(self):
-            return self.tree
+    @property
+    def parsed_data(self):
+        return self.tree
 
 
 def dataextraction_factory(filepath):
@@ -48,4 +48,26 @@ def main():
     json_data = json_factory.parsed_data
     print(f"Found: {len(json_data)} movies")
     for movie in json_data:
-        print(f"Title: {movie.title}")
+        print(f"Title: {movie['title']}")
+        rank = movie["rank"]
+        if rank:
+            print(f"Rank: {rank}")
+        movie_id = movie["id"]
+        if movie_id:
+            print(f"Movie ID: {movie_id}")
+        print()
+    xmlfactory = extract_data_from("data/person.xml")
+    xmldata = xmlfactory.parsed_data
+    liars = xmldata.findall(".//person[lastName='Liar']")
+    print(f"Found: {len(liars)} persons")
+    for liar in liars:
+        first_name = liar.find("firstName").text
+        print(f"First name: {first_name}")
+        last_name = liar.find("lastName").text
+        print(f"Last name: {last_name}")
+        [print(f"phone number ({p.attrib['type']}):", p.text) for p in liar.find("phoneNumbers")]
+        print()
+
+
+if __name__ == "__main__":
+    main()
