@@ -1,0 +1,1 @@
+MINI14 = "1.4 GHz Mac Mini"
