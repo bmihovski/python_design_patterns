@@ -1,6 +1,3 @@
-import builtins
-
-
 class Computer:
     def __init__(self) -> None:
         self.serial = None
